@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import LatLong from './LatLong.js';
 import ForecastCard from './ForecastCard.js'; 
+import WeatherState from './WeatherState.js';
+import HandleOpenWeatherMap from './HandleOpenWeatherMap.js';
+import UnixTimestampToDate from './UnixTimestampToDate.js';
 
 class TodaysForecast extends Component {
     constructor(props) {
@@ -8,52 +11,33 @@ class TodaysForecast extends Component {
         this.state = {
             latitude: null,
             longitude: null,
-            weatherState: {
-                time: null,
-                temperature: null,
-                feelsLike: null,
-                cloudPercent: null,
-                uvIndex: null,
-                windSpeed: null,
-                weather: {
-                weatherType: null,
-                weatherDescription: null
-                }
-            }
+            weatherState: WeatherState
         };
       
     }
-    getWeather = async (e) => {
-        const APIKey = process.env.REACT_APP_API_KEY;
     
-        const latitude = this.state.latitude;
-        const longitude = this.state.longitude;
-        //console.log(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${APIKey}`);
-        e.preventDefault();   
-        const api_call = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${APIKey}`);
-        const response = await api_call.json();
-        console.log(response);
-        this.setState({
+    setFromAPI = async (response) =>{
+        this.setState({ 
             weatherState: {
-                time: response.current.dt,
+                time: UnixTimestampToDate(response.current.dt),
                 temperature: response.current.temp,
                 feelsLike: response.current.feels_like,
                 cloudPercent: response.current.clouds,
                 uvIndex: response.current.uvi,
                 visibility: response.current.visibility,
                 windSpeed: response.current.wind_speed,
-                weather: {
                 weatherType: response.current.weather[0].main,
                 weatherDescription: response.current.weather[0].description
-                }
             }
-        })
+        });
     }
 
-    setLatLong = (lat, long) => {
-        this.setState({latitude: lat});
-        this.setState({longitude: long});
-
+    setLatLong = async (lat, long) => {
+        await this.setState({latitude: lat});
+        await this.setState({longitude: long});
+        const response = await HandleOpenWeatherMap(this.state.latitude, this.state.longitude)
+        this.setFromAPI(response);
+        
     }
 
     render() {
@@ -69,7 +53,6 @@ class TodaysForecast extends Component {
 
         </div>
         <div>
-            <button value="Send" onClick={ this.getWeather }>Update Weather</button>
             <ForecastCard state={this.state.weatherState} />
         </div>
       </div>
@@ -77,5 +60,4 @@ class TodaysForecast extends Component {
     );
   }
 }
-
 export default TodaysForecast;

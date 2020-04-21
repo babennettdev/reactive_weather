@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import App from './../App.js';
+
  
 class LatLong extends Component {
     constructor(props) {
@@ -19,9 +19,10 @@ class LatLong extends Component {
         });
     }
     
-    publish() {
-        console.log( this.state.latitudeBox, this.state.longitudeBox );
-        this.props.publish(this.state.latitudeBox, this.state.longitudeBox);
+    publish = async (e) =>{ 
+        e.preventDefault();
+        //console.log( this.state.latitudeBox, this.state.longitudeBox );
+        await this.props.publish(this.state.latitudeBox, this.state.longitudeBox);
     }
 
     render() {
@@ -43,7 +44,7 @@ class LatLong extends Component {
         onChange={ this.handleChange } 
         />
       
-        <button value="Send" onClick={ this.publish }>Set Coordinates</button>
+        <button value="Send" onClick={ this.publish }>Update Weather</button>
       </div>
       
     );

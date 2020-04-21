@@ -18,10 +18,10 @@ class App extends Component {
         <div>
           <h1>Reactive Weather</h1>
           <ul className="header">
-            <li><NavLink to ="/">Home</NavLink></li>
-            <li><NavLink to ="/TodaysForecast">Today's Forecast</NavLink></li>
-            <li><NavLink to ="/HourlyForecast">Hourly Forecast</NavLink></li>
-            <li><NavLink to ="/About">About</NavLink></li>
+            <li><NavLink to="/">Home</NavLink></li>
+            <li><NavLink to="/TodaysForecast">Today's Forecast</NavLink></li>
+            <li><NavLink to="/HourlyForecast">Hourly Forecast</NavLink></li>
+            <li><NavLink to="/About">About</NavLink></li>
           </ul>
           <div className="content">
             <Route exact path="/" component={Home}/>

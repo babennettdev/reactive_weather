@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import LatLong from './LatLong.js';
 import ForecastCard from './ForecastCard.js';
+import WeatherState from './WeatherState.js';
+import HandleOpenWeatherMap from './HandleOpenWeatherMap.js';
+import UnixTimestampToDate from './UnixTimestampToDate.js';
 
 class HourlyForecast extends Component {
     constructor(props) {
@@ -8,187 +11,44 @@ class HourlyForecast extends Component {
         this.state = {
             latitude: null,
             longitude: null,
-            weatherState0 : {
-                time: null,
-                temperature: null,
-                feelsLike: null,
-                cloudPercent: null,
-                uvIndex: null,
-                windSpeed: null,
-                weather: {
-                weatherType: null,
-                weatherDescription: null
-                }
-            },
-            weatherState1 : {
-                time: null,
-                temperature: null,
-                feelsLike: null,
-                cloudPercent: null,
-                uvIndex: null,
-                windSpeed: null,
-                weather: {
-                weatherType: null,
-                weatherDescription: null
-                }
-            },
-            weatherState2 : {
-                time: null,
-                temperature: null,
-                feelsLike: null,
-                cloudPercent: null,
-                uvIndex: null,
-                windSpeed: null,
-                weather: {
-                weatherType: null,
-                weatherDescription: null
-                }
-            },
-            weatherState3 : {
-                time: null,
-                temperature: null,
-                feelsLike: null,
-                cloudPercent: null,
-                uvIndex: null,
-                windSpeed: null,
-                weather: {
-                weatherType: null,
-                weatherDescription: null
-                }
-            },
-            weatherState4 : {
-                time: null,
-                temperature: null,
-                feelsLike: null,
-                cloudPercent: null,
-                uvIndex: null,
-                windSpeed: null,
-                weather: {
-                weatherType: null,
-                weatherDescription: null
-                }
-            },
-            weatherState5 : {
-                time: null,
-                temperature: null,
-                feelsLike: null,
-                cloudPercent: null,
-                uvIndex: null,
-                windSpeed: null,
-                weather: {
-                weatherType: null,
-                weatherDescription: null
-                }
-            },
-            weatherState6 : {
-                time: null,
-                temperature: null,
-                feelsLike: null,
-                cloudPercent: null,
-                uvIndex: null,
-                windSpeed: null,
-                weather: {
-                weatherType: null,
-                weatherDescription: null
-                }
-            },
-            weatherState7 : {
-                time: null,
-                temperature: null,
-                feelsLike: null,
-                cloudPercent: null,
-                uvIndex: null,
-                windSpeed: null,
-                weather: {
-                weatherType: null,
-                weatherDescription: null
-                }
-            },
-            weatherState8 : {
-                time: null,
-                temperature: null,
-                feelsLike: null,
-                cloudPercent: null,
-                uvIndex: null,
-                windSpeed: null,
-                weather: {
-                weatherType: null,
-                weatherDescription: null
-                }
-            },
-            weatherState9 : {
-                time: null,
-                temperature: null,
-                feelsLike: null,
-                cloudPercent: null,
-                uvIndex: null,
-                windSpeed: null,
-                weather: {
-                weatherType: null,
-                weatherDescription: null
-                }
-            },
-            weatherState10 : {
-                time: null,
-                temperature: null,
-                feelsLike: null,
-                cloudPercent: null,
-                uvIndex: null,
-                windSpeed: null,
-                weather: {
-                weatherType: null,
-                weatherDescription: null
-                }
-            },
-            weatherState11 : {
-                time: null,
-                temperature: null,
-                feelsLike: null,
-                cloudPercent: null,
-                uvIndex: null,
-                windSpeed: null,
-                weather: {
-                weatherType: null,
-                weatherDescription: null
-                }
-            }
+            weatherState0 : WeatherState,
+            weatherState1 : WeatherState,
+            weatherState2 : WeatherState,
+            weatherState3 : WeatherState,
+            weatherState4 : WeatherState,
+            weatherState5 : WeatherState,
+            weatherState6 : WeatherState,
+            weatherState7 : WeatherState,
+            weatherState8 : WeatherState,
+            weatherState9 : WeatherState,
+            weatherState10 : WeatherState,
+            weatherState11 : WeatherState,
             
         };
     }
 
-    getHourlyWeather = async (e) => {
-        const APIKey = process.env.REACT_APP_API_KEY;
-    
-        const latitude = this.state.latitude;
-        const longitude = this.state.longitude;
-        //console.log(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${APIKey}`);
-        e.preventDefault();   
-        const api_call = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${APIKey}`);
-        const response = await api_call.json();
-        console.log(response);
+    setFromAPIHourly = async (response) =>{
         let newArr = [];
         for(let i = 0; i < 12; i++){
             let weatherStateX = {
-                time: response.hourly[i].dt,
+                time: UnixTimestampToDate(response.hourly[i].dt),
                 temperature: response.hourly[i].temp,
                 feelsLike: response.hourly[i].feels_like,
                 cloudPercent: response.hourly[i].clouds,
                 uvIndex: response.hourly[i].uvi,
                 visibility: response.hourly[i].visibility,
                 windSpeed: response.hourly[i].wind_speed,
-                weather: {
                 weatherType: response.hourly[i].weather[0].main,
                 weatherDescription: response.hourly[i].weather[0].description
-                }
             };
             newArr.push(weatherStateX);
-            console.log(newArr);
+            //console.log(newArr);
             
         }
         this.setState({
             weatherState0 : newArr[0], 
             weatherState1 : newArr[1], 
-            weatherState3 : newArr[2], 
+            weatherState2 : newArr[2], 
             weatherState3 : newArr[3], 
             weatherState4 : newArr[4], 
             weatherState5 : newArr[5], 
@@ -202,9 +62,12 @@ class HourlyForecast extends Component {
         });
     }
 
-    setLatLong = (lat, long) => {
-        this.setState({latitude: lat});
-        this.setState({longitude: long});
+    setLatLong = async (lat, long) => {
+        await this.setState({latitude: lat});
+        await this.setState({longitude: long});
+        const response = await HandleOpenWeatherMap(this.state.latitude, this.state.longitude)
+        this.setFromAPIHourly(response);
+        
     }
 
     render() {
@@ -218,7 +81,6 @@ class HourlyForecast extends Component {
             <p></p>
         </div>
         <div>
-        <button value="Send" onClick={ this.getHourlyWeather }>Update Weather</button>
             <ForecastCard state={this.state.weatherState0} />
             <ForecastCard state={this.state.weatherState1} />
             <ForecastCard state={this.state.weatherState2} />

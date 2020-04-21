@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import TodaysForecast from './TodaysForecast';
  
 class Home extends Component {
     render() {
