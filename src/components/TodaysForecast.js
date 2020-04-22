@@ -11,6 +11,8 @@ class TodaysForecast extends Component {
         this.state = {
             latitude: null,
             longitude: null,
+            displayCards: false,
+            invalidLatLong: null,
             weatherState: WeatherState
         };
       
@@ -33,11 +35,25 @@ class TodaysForecast extends Component {
     }
 
     setLatLong = async (lat, long) => {
+        lat = Number(lat);
+        long = Number(long);
         await this.setState({latitude: lat});
         await this.setState({longitude: long});
-        const response = await HandleOpenWeatherMap(this.state.latitude, this.state.longitude)
-        this.setFromAPI(response);
-        
+        console.log(lat, long, typeof lat, typeof long);
+        if(typeof lat === "number" && typeof long === 'number'
+            && (lat > -90 && lat < 90) 
+            && (long > -180 && long < 180)){
+                this.displayCards = true;
+                this.invalidLatLong = false;
+                const response = await HandleOpenWeatherMap(this.state.latitude, this.state.longitude)
+                this.setFromAPI(response);
+                console.log(this.invalidLatLong, this.displayCards);
+        }
+        else{
+            this.invalidLatLong = true;
+            this.displayCards = false;
+            console.log(lat, long, this.invalidLatLong, this.displayCards);
+        }
     }
 
     render() {
@@ -49,11 +65,15 @@ class TodaysForecast extends Component {
         </p>
         <div>
             <LatLong publish={this.setLatLong}/>
-            <p></p>
+            {this.invalidLatLong === true &&
+            <p>Invalid latitude (-90 to 90) or longitude (-180 to 180)</p>
+        }
 
         </div>
         <div>
+            {this.displayCards === true &&
             <ForecastCard state={this.state.weatherState} />
+        }
         </div>
       </div>
       

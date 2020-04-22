@@ -11,6 +11,8 @@ class HourlyForecast extends Component {
         this.state = {
             latitude: null,
             longitude: null,
+            displayCards: false,
+            invalidLatLong: null,
             weatherState0 : WeatherState,
             weatherState1 : WeatherState,
             weatherState2 : WeatherState,
@@ -63,11 +65,23 @@ class HourlyForecast extends Component {
     }
 
     setLatLong = async (lat, long) => {
+        lat = Number(lat);
+        long = Number(long);
         await this.setState({latitude: lat});
         await this.setState({longitude: long});
-        const response = await HandleOpenWeatherMap(this.state.latitude, this.state.longitude)
-        this.setFromAPIHourly(response);
-        
+        if(typeof lat === "number" && typeof long === 'number'
+            && (lat > -90 && lat < 90) 
+            && (long > -180 && long < 180)){
+                this.displayCards = true;
+                this.invalidLatLong = false;
+                const response = await HandleOpenWeatherMap(this.state.latitude, this.state.longitude)
+                this.setFromAPIHourly(response);
+        }
+        else{
+            this.invalidLatLong = true;
+            this.displayCards = false;
+            
+        }
     }
 
     render() {
@@ -78,21 +92,47 @@ class HourlyForecast extends Component {
             then update the weather for the next twelve hours</p>
         <div>
             <LatLong publish={this.setLatLong}/>
-            <p></p>
+            {this.invalidLatLong === true &&
+            <p>Invalid latitude (-90 to 90) or longitude (-180 to 180)</p>
+        }
         </div>
         <div>
-            <ForecastCard state={this.state.weatherState0} />
-            <ForecastCard state={this.state.weatherState1} />
-            <ForecastCard state={this.state.weatherState2} />
-            <ForecastCard state={this.state.weatherState3} />
-            <ForecastCard state={this.state.weatherState4} />
-            <ForecastCard state={this.state.weatherState5} />
-            <ForecastCard state={this.state.weatherState6} />
-            <ForecastCard state={this.state.weatherState7} />
-            <ForecastCard state={this.state.weatherState8} />
-            <ForecastCard state={this.state.weatherState9} />
-            <ForecastCard state={this.state.weatherState10} />
-            <ForecastCard state={this.state.weatherState11} />
+            {this.displayCards === true &&
+            <ForecastCard state={this.state.weatherState0} /> 
+        }
+            {this.displayCards === true &&
+            <ForecastCard state={this.state.weatherState1} /> 
+        }
+            {this.displayCards === true &&
+            <ForecastCard state={this.state.weatherState2} /> 
+        }   
+            {this.displayCards === true &&
+            <ForecastCard state={this.state.weatherState3} /> 
+        }
+            {this.displayCards === true &&
+            <ForecastCard state={this.state.weatherState4} /> 
+        }
+            {this.displayCards === true &&
+            <ForecastCard state={this.state.weatherState5} /> 
+        }
+            {this.displayCards === true &&
+            <ForecastCard state={this.state.weatherState6} /> 
+        }
+            {this.displayCards === true &&
+            <ForecastCard state={this.state.weatherState7} /> 
+        }
+            {this.displayCards === true &&
+            <ForecastCard state={this.state.weatherState8} /> 
+        }
+            {this.displayCards === true &&
+            <ForecastCard state={this.state.weatherState9} /> 
+        }
+            {this.displayCards === true &&
+            <ForecastCard state={this.state.weatherState10} /> 
+        }
+            {this.displayCards === true &&
+            <ForecastCard state={this.state.weatherState11} /> 
+        }
         </div>
       </div>
     );

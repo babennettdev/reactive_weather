@@ -13,12 +13,12 @@ class ForecastCard extends Component {
         <div class="card">
             <div class="card-body">
               <h5 class="card-title">Date: {this.props.state.time}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Temperature: {this.props.state.temperature}</h6>
-              <h6 class="card-subtitle mb-2 text-muted">Feels like: {this.props.state.feelsLike}</h6>
+              <h6 class="card-subtitle mb-2 text-muted">Temperature: {this.props.state.temperature}°F</h6>
+              <h6 class="card-subtitle mb-2 text-muted">Feels like: {this.props.state.feelsLike}°F</h6>
               <h6 class="card-subtitle mb-2 text-muted">Weather: {this.props.state.weatherType}</h6>
               <h6 class="card-subtitle mb-2 text-muted">Weather description: {this.props.state.weatherDescription}</h6>
-              <h6 class="card-subtitle mb-2 text-muted">Cloud percent: {this.props.state.cloudPercent}</h6>
-              <h6 class="card-subtitle mb-2 text-muted">Wind Speed: {this.props.state.windSpeed}</h6>
+              <h6 class="card-subtitle mb-2 text-muted">Cloud percent: {this.props.state.cloudPercent}% cloudy</h6>
+              <h6 class="card-subtitle mb-2 text-muted">Wind Speed: {this.props.state.windSpeed} miles/hour</h6>
               <p class="card-text"></p>
             </div>
         </div>
