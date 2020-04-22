@@ -13,6 +13,7 @@ class TodaysForecast extends Component {
             longitude: null,
             displayCards: false,
             invalidLatLong: null,
+            invalidAPIResponse: null,
             weatherState: WeatherState
         };
       
@@ -46,8 +47,14 @@ class TodaysForecast extends Component {
                 this.displayCards = true;
                 this.invalidLatLong = false;
                 const response = await HandleOpenWeatherMap(this.state.latitude, this.state.longitude)
-                this.setFromAPI(response);
-                console.log(this.invalidLatLong, this.displayCards);
+                if(response === 'invalid response'){
+                    this.invalidAPIResponse = true;
+                }
+                else{
+                    this.invalidAPIResponse = false;
+                    this.setFromAPI(response);
+                    console.log(this.invalidLatLong, this.displayCards);
+                }
         }
         else{
             this.invalidLatLong = true;
@@ -67,6 +74,9 @@ class TodaysForecast extends Component {
             <LatLong publish={this.setLatLong}/>
             {this.invalidLatLong === true &&
             <p>Invalid latitude (-90 to 90) or longitude (-180 to 180)</p>
+        }
+            {this.invalidAPIResponse === true &&
+            <p>Invalid API response, please try again.</p>
         }
 
         </div>

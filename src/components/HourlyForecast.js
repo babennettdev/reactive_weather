@@ -13,6 +13,7 @@ class HourlyForecast extends Component {
             longitude: null,
             displayCards: false,
             invalidLatLong: null,
+            invalidAPIResponse: null,
             weatherState0 : WeatherState,
             weatherState1 : WeatherState,
             weatherState2 : WeatherState,
@@ -75,7 +76,13 @@ class HourlyForecast extends Component {
                 this.displayCards = true;
                 this.invalidLatLong = false;
                 const response = await HandleOpenWeatherMap(this.state.latitude, this.state.longitude)
-                this.setFromAPIHourly(response);
+                if(response === 'invalid response'){
+                    this.invalidAPIResponse = true;
+                }
+                else{
+                    this.invalidAPIReponse = false;
+                    this.setFromAPIHourly(response);
+                }
         }
         else{
             this.invalidLatLong = true;
@@ -94,6 +101,9 @@ class HourlyForecast extends Component {
             <LatLong publish={this.setLatLong}/>
             {this.invalidLatLong === true &&
             <p>Invalid latitude (-90 to 90) or longitude (-180 to 180)</p>
+        }
+            {this.invalidAPIResponse === true &&
+            <p>Invalid API response, please try again.</p>
         }
         </div>
         <div>
