@@ -89,7 +89,7 @@ class HourlyForecast extends Component {
       <div>
         <h1>Hourly Forecast</h1>
         <p>Set your latitude and longitude below, 
-            then update the weather for the next twelve hours</p>
+            then update the weather for the next twelve hours.</p>
         <div>
             <LatLong publish={this.setLatLong}/>
             {this.invalidLatLong === true &&

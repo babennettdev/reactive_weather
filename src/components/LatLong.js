@@ -34,7 +34,7 @@ class LatLong extends Component {
         placeholder="Enter latitude..." 
         value={ this.state.latitudeBox }
         onChange={ this.handleChange } 
-        />
+        />°N{'  '}
       
         <input 
         type="text" 
@@ -42,7 +42,7 @@ class LatLong extends Component {
         placeholder="Enter longitude..."
         value={ this.state.longitudeBox } 
         onChange={ this.handleChange } 
-        />
+        />°W{'  '}
       
         <button value="Send" onClick={ this.publish }>Update Weather</button>
       </div>
