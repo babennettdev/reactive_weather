@@ -42,8 +42,8 @@ class TodaysForecast extends Component {
         await this.setState({longitude: long});
         console.log(lat, long, typeof lat, typeof long);
         if(typeof lat === "number" && typeof long === 'number'
-            && (lat > -90 && lat < 90) 
-            && (long > -180 && long < 180)){
+            && (lat >= -90 && lat <= 90) 
+            && (long >= -180 && long <= 180)){
                 this.displayCards = true;
                 this.invalidLatLong = false;
                 const response = await HandleOpenWeatherMap(this.state.latitude, this.state.longitude)

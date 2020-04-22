@@ -71,8 +71,8 @@ class HourlyForecast extends Component {
         await this.setState({latitude: lat});
         await this.setState({longitude: long});
         if(typeof lat === "number" && typeof long === 'number'
-            && (lat > -90 && lat < 90) 
-            && (long > -180 && long < 180)){
+            && (lat >= -90 && lat <= 90) 
+            && (long >= -180 && long <= 180)){
                 this.displayCards = true;
                 this.invalidLatLong = false;
                 const response = await HandleOpenWeatherMap(this.state.latitude, this.state.longitude)
